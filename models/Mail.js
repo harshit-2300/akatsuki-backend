@@ -14,11 +14,15 @@ const Mail = new mongoose.Schema(
         },
         body: {
             type: String,
-            default:'',
+            default: '',
         },
         text: {
             type: String,
-            default:'',
+            default: '',
+        },
+        scheduledAt: {
+            type: Date,
+            default: Date.now,
         }
     },
     { timestamps: true },
