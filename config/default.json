@@ -1,7 +1,4 @@
 {
-  "apiLink": "https://hlapi1234.herokuapp.com/api/",
-  "MAX_RETRY_ATTEMPT": 3,
-  "OTP_VALIDITY_IN_MINS": 20,
   "secret": "mysecret",
   "sessionSecret": "secret"
 }
