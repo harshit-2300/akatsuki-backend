@@ -1,15 +1,7 @@
 const { validationResult } = require('express-validator');
-const nodemailer = require('nodemailer')
-
-let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
-    },
-});
+const { sendEmailService } = require('../services/sendEmailService');
+const { scheduleAndSendEmail } = require('../utils/scheduleAndSendEmail');
+const Mail = require('../models/Mail');
 const sendEmail = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -17,14 +9,16 @@ const sendEmail = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        const { to, cc, subject, text, scheduledAt } = req.body;
+        const newMail = new Mail({ from: req.user.id, to, cc, subject, text, scheduledAt, isSent: false });
+        await newMail.save();
+        scheduleAndSendEmail();
+        res.status(200).json({ msg: 'Email Sent ' });
     } catch (error) {
         console.log(err.message);
         return res.status(500).send('Server Error');
     }
 
-}
+};
 
-const scheduleMail = async (req, res) => {
-    
-}
 module.exports = { sendEmail }

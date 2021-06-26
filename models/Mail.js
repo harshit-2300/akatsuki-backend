@@ -6,13 +6,9 @@ const Mail = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
-        receivers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
-        cc: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+        to: { type: [String] },
+        cc: { type: [String] },
         subject: {
-            type: String,
-            default: '',
-        },
-        body: {
             type: String,
             default: '',
         },
@@ -23,6 +19,10 @@ const Mail = new mongoose.Schema(
         scheduledAt: {
             type: Date,
             default: Date.now,
+        },
+        isSent: {
+            type: Boolean,
+            defualt: false,
         }
     },
     { timestamps: true },
