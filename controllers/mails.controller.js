@@ -1,5 +1,4 @@
 const { validationResult } = require('express-validator');
-const { sendEmailService } = require('../services/sendEmailService');
 const { scheduleAndSendEmail } = require('../utils/scheduleAndSendEmail');
 const Mail = require('../models/Mail');
 const sendEmail = async (req, res) => {
@@ -15,10 +14,31 @@ const sendEmail = async (req, res) => {
         scheduleAndSendEmail();
         res.status(200).json({ msg: 'Email Sent ' });
     } catch (error) {
-        console.log(err.message);
+        console.log(error.message);
         return res.status(500).send('Server Error');
     }
 
 };
 
-module.exports = { sendEmail }
+const getScheduledMails = async (req, res) => {
+    try {
+        const mails = await Mail.find({ from: req.user.id, isSent: false }).sort({ scheduledAt: -1 });
+        res.status(200).json(mails);
+
+    } catch (error) {
+        console.log(err.message);
+        return res.status(500).send('Server Error');
+    }
+}
+
+const getSentMails = async (req, res) => {
+    try {
+        const mails = await Mail.find({ from: req.user.id, isSent: true }).sort({ scheduledAt: -1 });
+        res.status(200).json(mails);
+
+    } catch (error) {
+        console.log(err.message);
+        return res.status(500).send('Server Error');
+    }
+}
+module.exports = { sendEmail, getScheduledMails, getSentMails };
