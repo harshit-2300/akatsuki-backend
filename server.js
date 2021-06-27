@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
-
-// app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
 app.use('/api/mail', require('./routes/api/mail'));
 
 
